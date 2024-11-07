@@ -9,3 +9,4 @@ python_bcrypt==0.3.2
 uvicorn==0.29.0
 PyJWT==2.8.0
 mime==0.1.0
+email_validator==2.1.1
