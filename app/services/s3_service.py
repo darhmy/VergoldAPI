@@ -16,7 +16,7 @@ class S3Service:
     async def upload_file(self, file:UploadFile , file_type: str, email: str) -> str:
         #file_extension = file.filename.split(".")[-1]
         foldername = "VergoldWebFiles"
-        unique_filename = f"{foldername}/{file_type}/{str(uuid.uuid4()).replace("-", "")[:16]}_{file.filename}"
+        unique_filename = f"{foldername}/{file_type}/{str(uuid.uuid4())}_{file.filename}"
 
         file_content = await file.read()
 
