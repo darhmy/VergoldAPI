@@ -1,8 +1,9 @@
 import uuid
-import bcrypt
+#import bcrypt
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
+from argon2 import PasswordHasher, exceptions
 
 from app.models.dto import serializeDict
 from app.schemas.profile_schema import UpdateProfileRequest
@@ -73,12 +74,16 @@ class ProfileCRUD:
         # Check if the email already exists in the profiles collection
         return self.profiles_collection.find_one({"email": email}) is not None
     
-    def hash_password(self, password: str) -> str:
-        salt = bcrypt.gensalt()
-        return bcrypt.hashpw(password.encode("utf-8"), salt)
+    # def hash_password(self, password: str) -> str:
+    #     salt = bcrypt.gensalt()
+    #     return bcrypt.hashpw(password.encode("utf-8"), salt)
 
     def update_password(self, email: str, new_password: str):
-        hashed_password = self.hash_password(new_password)
+        #hashed_password = self.hash_password(new_password)
+
+        ph = PasswordHasher()
+        
+        hashed_password = ph.hash(password= new_password)
         self.profiles_collection.update_one(
             {"email": email},
             {"$set": {"password": hashed_password, "updated_at": datetime.now()}}
@@ -86,11 +91,19 @@ class ProfileCRUD:
 
     def verify_password(self, email: str, password: str) -> bool:
         # Retrieve the user's stored password hash
-        user = self.profiles_collection.find_one({"email": email})
-        if user and "password" in user:
-            return bcrypt.checkpw(password.encode("utf-8"), user["password"])
-        return False
-    
+        try:
+            ph = PasswordHasher()
+            user = self.profiles_collection.find_one({"email": email})
+            if(ph.verify(hash= user["password"], password= password)):
+                return True
+            else:
+                return False
+            # if user and "password" in user:
+            #     return bcrypt.checkpw(password.encode("utf-8"), user["password"])
+            # return False
+        except exceptions.VerifyMismatchError:
+            return False
+        
     async def update_profile(self, profileRequest: UpdateProfileRequest):
         user = self.profiles_collection.find_one({"email": profileRequest.personal_information.email})
         
