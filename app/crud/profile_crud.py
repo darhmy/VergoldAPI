@@ -30,8 +30,8 @@ class ProfileCRUD:
          else:
              return None
          
-    def get_profile_by_userId(self, userId: str):
-         profile = self.profiles_collection.find_one({"user_id": userId}) 
+    def get_profile_by_email(self, userId: str):
+         profile = self.profiles_collection.find_one({"email": userId}) 
          if profile is not None:
              return serializeDict(profile)
          else:

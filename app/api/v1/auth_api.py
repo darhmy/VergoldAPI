@@ -5,13 +5,17 @@ from app.schemas.profile_schema import ProfileCreateRequest, SignInRequest, Toke
 from app.repositories.profile_repository import ProfileRepository
 from app.services.email_service import send_verification_email
 from pymongo import MongoClient
-from app.core.config import settings
+#from app.core.config import settings
+from decouple import config
 
 router = APIRouter()
 
+mongoDBConnectionString = config("MONGO_URI")
 # Initialize MongoDB client
-client = MongoClient(settings.MONGO_URI)
-db = client["VergoldWebDB"]
+client = MongoClient(mongoDBConnectionString)
+db = client["VergoldWebAPIDB"]
+
+#profileDB = db["profiles"]
 
 @router.post("/register", response_model=ResponseModel)
 async def register(request: ProfileCreateRequest):

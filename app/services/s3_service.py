@@ -2,15 +2,21 @@ import boto3
 import uuid
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 from fastapi import File, UploadFile
-from app.core.config import settings
+#from app.core.config import settings
+from decouple import config
+
+awsRegion = config("AWS_REGION")
+s3AccessKey = config("S3_ACCESS_KEY")
+s3SecretKey = config("S3_SECRET_KEY")
+s3BucketName = config("S3_BUCKET_NAME")
 
 class S3Service:
     def __init__(self):
         self.s3_client = boto3.client(
             "s3",
-            aws_access_key_id=settings.S3_ACCESS_KEY,
-            aws_secret_access_key=settings.S3_SECRET_KEY,
-            region_name=settings.AWS_REGION
+            aws_access_key_id=s3AccessKey,
+            aws_secret_access_key=s3SecretKey,
+            region_name=awsRegion
         )
 
     async def upload_file(self, file:UploadFile , file_type: str, email: str) -> str:
@@ -25,7 +31,7 @@ class S3Service:
        # .{file_extension}"
 
         try:
-           self.s3_client.put_object(Bucket=settings.S3_BUCKET_NAME, Key=unique_filename, Body=file_content)
+           self.s3_client.put_object(Bucket=s3BucketName, Key=unique_filename, Body=file_content)
             # self.s3_client.upload_fileobj(
             #     file,
             #     settings.S3_BUCKET_NAME,
@@ -37,4 +43,4 @@ class S3Service:
         except Exception as e:
             raise Exception(f"Failed to upload file to S3: {str(e)}")
 
-        return f"https://{settings.S3_BUCKET_NAME}.s3.{settings.AWS_REGION}.amazonaws.com/{unique_filename}"
+        return f"https://{s3BucketName}.s3.{awsRegion}.amazonaws.com/{unique_filename}"

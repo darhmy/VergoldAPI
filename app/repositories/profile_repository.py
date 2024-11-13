@@ -12,8 +12,8 @@ class ProfileRepository:
     def get_profile(self, email:str):
        return  self.profile.get_profile(email)
     
-    def get_profile_by_userId(self, userId:str):
-       return  self.profile.get_profile_by_userId(userId)
+    def get_profile_by_email(self, userId:str):
+       return  self.profile.get_profile_by_email(userId)
 
     
     def email_exist(self, email: str) -> bool:
