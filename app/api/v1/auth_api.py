@@ -29,8 +29,8 @@ async def register(request: ProfileCreateRequest):
     send_verification_email(request.email, token)
 
     data = {
-        "Email Address": request.email,
-        "Token" : token
+        "emailAddress": request.email,
+        "token" : token
         }
     return ResponseModel(status= "200", message="Verification email sent.", data= data)
 
