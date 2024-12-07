@@ -14,9 +14,14 @@ mongoDBConnectionString = config("MONGO_URI")
 client = MongoClient(mongoDBConnectionString)
 db = client["VergoldWebAPIDB"]
 
-@router.post("/initialize-payment", response_model=ResponseModel)
+# @router.post("discount/{code}", response_model= ResponseModel)
+# async def discount(code:str):
+
+
+@router.post("/initialize-payment/", response_model=ResponseModel)
 async def initialize_payment(payment_details:Payments):
   
+
   paymentRepo = PaymentRepository(db)
 
   payment = paymentRepo.save_payment(payment_details)

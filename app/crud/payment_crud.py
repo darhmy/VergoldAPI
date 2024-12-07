@@ -40,6 +40,8 @@ class PaymentCRUD:
             "Status": "Pending",
             "TrasactionRefernce" : trans_reference,
             "Amount": paymentDetails.amount,
+            "Duration": paymentDetails.duration,
+            "DurationType": paymentDetails.durationType,
             "PaymentType": paymentDetails.paymentType,
             "PaymentCategory": paymentDetails.paymentCategory,
             "DateCreated": datetime.now(),
