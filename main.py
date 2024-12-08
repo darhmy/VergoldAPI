@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1 import auth_api, profile_api, payment_api
 
@@ -17,6 +17,11 @@ app.include_router(auth_api.router, prefix="/api/v1/auth", tags=["Authetication"
 app.include_router(profile_api.router, prefix="/api/v1/profile", tags=["Profile"])
 
 app.include_router(payment_api.router, prefix="/api/v1/payment", tags=["Payment"])
+
+@app.post("/webhook")
+async def paystack_webhook(request: Request):
+    result = await request.json()
+    print(result)
 
 @app.get("/")
 def read_root():

@@ -14,7 +14,7 @@ def accept_payments(email:str,amount:float, reference: str):
         "amount":amount * 100,
         "channels": ["card", "bank", "bank_transfer"],
         "reference": reference,
-        "callback_url": f"https://vergoldapi.onrender.com/api/v1/payment/update-payment/{reference}"
+        # "callback_url": f"https://vergoldapi.onrender.com/api/v1/payment/update-payment/{reference}"
         #"callback_url": f"http://127.0.0.1:8000/api/v1/payment/update-payment/{reference}"
     }
     
@@ -23,6 +23,8 @@ def accept_payments(email:str,amount:float, reference: str):
         # response.raise_for_status()
         
         result = response.json()["data"]["authorization_url"]
+
+        #print(type(result))
 
         return result
     except requests.exceptions.HTTPError as e:

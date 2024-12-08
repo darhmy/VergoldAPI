@@ -51,6 +51,8 @@ class PaymentCRUD:
 
         payment_url = accept_payments(email = paymentDetails.email, amount = paymentDetails.amount,
                                        reference = trans_reference)
+        
+        #print(f"The payment url type is{type(payment_url)}")
 
         return payment_url
     
